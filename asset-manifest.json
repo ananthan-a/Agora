@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/Agora/static/css/main.dc4ef0b4.chunk.css",
+    "main.js": "/Agora/static/js/main.99304eac.chunk.js",
+    "main.js.map": "/Agora/static/js/main.99304eac.chunk.js.map",
+    "runtime-main.js": "/Agora/static/js/runtime-main.5faad693.js",
+    "runtime-main.js.map": "/Agora/static/js/runtime-main.5faad693.js.map",
+    "static/js/2.1e418752.chunk.js": "/Agora/static/js/2.1e418752.chunk.js",
+    "static/js/2.1e418752.chunk.js.map": "/Agora/static/js/2.1e418752.chunk.js.map",
+    "index.html": "/Agora/index.html",
+    "static/css/main.dc4ef0b4.chunk.css.map": "/Agora/static/css/main.dc4ef0b4.chunk.css.map",
+    "static/js/2.1e418752.chunk.js.LICENSE.txt": "/Agora/static/js/2.1e418752.chunk.js.LICENSE.txt",
+    "static/media/MessageIcon.4869f474.png": "/Agora/static/media/MessageIcon.4869f474.png",
+    "static/media/SkypeIcon.161a3b91.png": "/Agora/static/media/SkypeIcon.161a3b91.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.5faad693.js",
+    "static/js/2.1e418752.chunk.js",
+    "static/css/main.dc4ef0b4.chunk.css",
+    "static/js/main.99304eac.chunk.js"
+  ]
+}
