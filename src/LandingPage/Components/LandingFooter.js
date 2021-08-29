@@ -26,11 +26,11 @@ export default class LandingPageFooter extends React.Component{
                     </div>
                 </div>
                 <div className="LandingPageFooterMiddle">
-                    <a href="#" className="FooterMiddleHref">ABOUT US</a><br/>
-                    <a href="#" className="FooterMiddleHref">Products</a><br/>
-                    <a href="#" className="FooterMiddleHref">Categories</a><br/>
-                    <a href="#" className="FooterMiddleHref">Stores</a><br/>
-                    <a href="#" className="FooterMiddleHref">Contact Us</a>
+                    <a href="#AboutUs" className="FooterMiddleHref">ABOUT US</a><br/>
+                    <a href="#Products" className="FooterMiddleHref">Products</a><br/>
+                    <a href="#Categories" className="FooterMiddleHref">Categories</a><br/>
+                    <a href="#Stores" className="FooterMiddleHref">Stores</a><br/>
+                    <a href="#ContactUs" className="FooterMiddleHref">Contact Us</a>
                 </div>
                 <div className="LandingPageFooterRight">
                     <img src={TwitterIcon} className="FooterRightIcon" alt="TwitterIcon"/>

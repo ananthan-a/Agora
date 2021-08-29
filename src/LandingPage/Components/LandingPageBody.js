@@ -1,121 +1,100 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Style/LandingPage.css';
-import Product from '../Sources/Product.json';
-import styled from "styled-components";
+//import ProductJsons from '../Sources/Products.json';
+import StarComponent from './StarComponent';
+import SizeComponent from './SizeCompoent';
+import ColorComponent from './ColorComponent';
+import ThumbComponent from './ThumbComponent';
+import TagComponent from './TagComponent';
+import axios from "axios";
 
-const Button = styled.button`
-    background-color:  ${(props) => props.IconColor};
-    transform: ${(props) => props.IconColor===props.ActiveColor ? "scale(1.35)" : "scale(1)"};
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    border: ${(props) => props.IconColor===props.ActiveColor ? "black solid 2px" : "black solid 1px"};
-    margin-left: 15px;
-    margin-right: 15px;
+const baseURL = "https://json.extendsclass.com/bin/395db4eba7ff"; //Shoes
+//const baseURL = "https://json.extendsclass.com/bin/fb25314d339a"; //Books
+const Type = "Type3"
 
-    @media (max-width: 500px){
-        margin-left: 5px;
-        margin-right: 5px;
-    }
-`;
+
 
 export default function LandingPageBody(){
 
+    //const Type = "Type3";
     const [BigImage, SetBigImage] = useState("");
     const [ThumbImage, SetThumbImage] = useState("");
     const [ColorImage, SetColorImage] = useState("");
     const [SizeImage, SetSizeImage] = useState("");
+    const [ProductJson, SetProductJson] = useState({});
+
+    useEffect(() => {
+        axios.get(baseURL).then((response) => {
+            SetProductJson(response.data);
+            console.log("data : ",response.data)
+        });
+    },[]);
+    
 
     function ThumbNailButtonClicked(data){
         SetBigImage(data);
         SetThumbImage(data);
     }
     
-    return(
-        <div className="LandingPageBody">
-            <div className="LandingPageBodyLeft">
-                <div className="LandingPageBodyThumb">
-                    {
-                        Product.image.map((images) => {
-                            return(
-                                <div className={ThumbImage==="" ?  (Product.image[0].name===images.name ? "LandingPageBodyThumbImagesActive" : "LandingPageBodyThumbImages") : (ThumbImage===images.name ? "LandingPageBodyThumbImagesActive" : "LandingPageBodyThumbImages")} >
-                                    <img src={images.name} onClick={() => ThumbNailButtonClicked(images.name)}/>
+    if(ProductJson.responseCode === 0){
+        return(
+            <div className="LandingPageBody" key={ProductJson.responseData.productId}>
+                <div className="LandingPageBodyLeft">
+                    { Type === "Type3" ? <ThumbComponent Product={ProductJson.responseData} ThumbImage={ThumbImage} ThumbNailButtonClicked={ThumbNailButtonClicked} Flex="Vertical"/> : <div/> }
+                    <div className="LandingPageBodyImageAndColor">
+                        <div className="LandingPageBodyImage">
+                            <img src={BigImage==="" ? ProductJson.responseData.productImagePath[0].name : BigImage} className="LandingPageBodyIcon" alt="ProductBigImage"/>
+                        </div>
+                        { Type === "Type3" ?
+                            <ColorComponent Product={ProductJson.responseData} ColorImage={ColorImage} SetColorImage={SetColorImage} Type={Type}/>
+                            : 
+                            Type === "Type2" ?
+                                <div className="Flex">
+                                    <ThumbComponent Product={ProductJson.responseData} ThumbImage={ThumbImage} ThumbNailButtonClicked={ThumbNailButtonClicked} Flex="Horizontal"/>
+                                    <StarComponent Product={ProductJson.responseData}/>
                                 </div>
-                            )
-                        })
-                    }
-                </div>
-                <div className="LandingPageBodyImageAndColor">
-                    <div className="LandingPageBodyImage">
-                        <img src={BigImage==="" ? Product.image[0].name : BigImage}className="LandingPageBodyIcon"/>
-                    </div>
-                    <div className="LandingPageBodyColor">
-                        <div className="LandingPageBodyColorHead">Colors: </div>
-                        {
-                            Product.color.map((colors) => {
-                                return(
+                                :
+                                Type === "Type1" ?
                                     <div>
-                                        <Button
-                                            IconColor={colors.name}
-                                            ActiveColor={ColorImage==="" ? Product.color[0].name : ColorImage}
-                                            onClick={() => SetColorImage(colors.name)}
-                                        />
+                                        <div className="Flex">
+                                            <TagComponent Product={ProductJson.responseData} />
+                                            <StarComponent Product={ProductJson.responseData}/>
+                                        </div>
+                                        <ColorComponent Product={ProductJson.responseData} ColorImage={ColorImage} SetColorImage={SetColorImage} Type={Type}/>
                                     </div>
-                                )
-                            })
+                                :
+                                <div/>
                         }
                     </div>
                 </div>
-            </div>
-            <div className="LandingPageBodyRight">
-                <div className="LandingPageBodyRightHead">
-                    <div>
-                        <div className="LandingPageBodyName">{Product.name.toUpperCase()}</div>
-                        <div className="LandingPageBodyType">{Product.type}</div>
+                <div className="LandingPageBodyRight">
+                    <div className="LandingPageBodyRightHead">
+                        <div>
+                            <div className="LandingPageBodyName">{ProductJson.responseData.productName.toUpperCase()}</div>
+                            <div className="LandingPageBodyType">{ProductJson.responseData.type}</div>
+                        </div>
+                        <div className="LandingPageBodyPrize">USD {ProductJson.responseData.onlineSellingPrice}$</div>
                     </div>
-                    <div className="LandingPageBodyPrize">USD {Product.prize}$</div>
-                </div>
-                <div className="LandingPageBodyRating">
-                    <span className={Product.rating >= 1 ? "fa fa-star checked" : "fa fa-star unchecked"}></span>
-                    <span className={Product.rating >= 2 ? "fa fa-star checked" : "fa fa-star unchecked"}></span>
-                    <span className={Product.rating >= 3 ? "fa fa-star checked" : "fa fa-star unchecked"}></span>
-                    <span className={Product.rating >= 4 ? "fa fa-star checked" : "fa fa-star unchecked"}></span>
-                    <span className={Product.rating >= 5 ? "fa fa-star checked" : "fa fa-star unchecked"}></span>
-                </div>
-                <div className="LandingPageBodyDiscription">{Product.discription}</div>
-                <div className="LandingPageBodyTag">
-                    {
-                        Product.tag.map((tags) => {
-                            return(
-                                <div className="LandingPageBodyTagMap">{tags.name}</div>
-                            )
-                        })
-                    }
-                </div>
-                <div className="LandingPageBodySizeHead">Select Size (UK Size)</div>
-                <div className="LandingPageBodySize">
-                    {
-                        Product.size.map((sizes) => {
-                            return(
-                                <div>
-                                    <button
-                                        type="button"
-                                        className={SizeImage==="" ? (sizes.name===Product.size[0].name ? "LandingPageBodySizeMapActive" : "LandingPageBodySizeMap") : (sizes.name===SizeImage ? "LandingPageBodySizeMapActive" : "LandingPageBodySizeMap")}
-                                        onClick={() => SetSizeImage(sizes.name)}>
-                                            {sizes.name}
-                                    </button>
-                                    <div className={SizeImage==="" ? (sizes.name===Product.size[0].name ? "LandingPageBodySizeUnderlineMapActive" : "LandingPageBodySizeUnderlineMap") : (sizes.name===SizeImage ? "LandingPageBodySizeUnderlineMapActive" : "LandingPageBodySizeUnderlineMap")}></div>
-                                </div>
-                            )
-                        })
-                    }
-                </div>
-                <div className="AddToCardAndVisitWebsite">
-                    <div><button className="LandingPageBodyAddToCard" onClick={() => alert("Item Added to your card successfully !!!")}>ADD TO CARD</button></div>
-                    <div><button className="LandingPageBodyVisitWebsite" onClick={event =>  window.location.href="https://www.openturf.in/"}>VISIT WEBSITE</button></div>
+                    { Type === "Type3" ? <StarComponent Product={ProductJson.responseData}/> : <div/> }
+                    <div className="LandingPageBodyDiscription">{ProductJson.responseData.productLongDescription}</div>
+                    { ProductJson.responseData.author ? <p className="LandingPageBodyGeneralQuestion"><span>Author Name : </span>{ProductJson.responseData.author}</p> : <div/>}
+                    { ProductJson.responseData.Publisher ? <div className="LandingPageBodyGeneralQuestion"><span>Publisher : </span>{ProductJson.responseData.Publisher}</div> : <div/>}
+                    { ProductJson.responseData.Language ? <div className="LandingPageBodyGeneralQuestion"><span>Language : </span>{ProductJson.responseData.Language}</div> : <div/>}
+                    { ProductJson.responseData.Paperback ? <div className="LandingPageBodyGeneralQuestion"><span>Paperback : </span>{ProductJson.responseData.Paperback}</div> : <div/>}
+                    { Type === "Type2" || Type === "Type3" ? <TagComponent Product={ProductJson.responseData} /> : <div/> }
+                    { Type === "Type1" || Type === "Type3" ? <SizeComponent Product={ProductJson.responseData} SizeImage={SizeImage} SetSizeImage={SetSizeImage} Type="UnderScore"/> : <SizeComponent Product={ProductJson.responseData} SizeImage={SizeImage} SetSizeImage={SetSizeImage} Type="DropDown"/> }
+                    { Type === "Type2" ? <ColorComponent Product={ProductJson.responseData} ColorImage={ColorImage} SetColorImage={SetColorImage} Type={Type}/> : <div/> }
+                    <div className="AddToCardAndVisitWebsite">
+                        <div className="AddToCardAndVisitWebsiteInnerDiv"><button className="LandingPageBodyAddToCard" onClick={() => alert("Item Added to your card successfully !!!")}>ADD TO CARD</button></div>
+                        <div className="AddToCardAndVisitWebsiteInnerDiv"><button className="LandingPageBodyVisitWebsite" onClick={event =>  window.location.href="https://www.openturf.in/"}>VISIT WEBSITE</button></div>
+                    </div>
                 </div>
             </div>
-        </div>
-    )
-    
+        )
+    }else{
+        return(
+            <div>404 Not found</div>
+        )
+    }
+
 }

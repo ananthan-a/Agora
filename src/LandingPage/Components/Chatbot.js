@@ -16,7 +16,7 @@ export default function Chatbot(){
 
     return(
         <div className="Chatbot">
-            <img src={ChatbotIcon} className="ChatbotIcon" onClick={() => ShowChat()}/>
+            <img src={ChatbotIcon} className="ChatbotIcon" onClick={() => ShowChat()} alt="ChatBotIcon"/>
             <div className="Chat" id="Chat">Hey Hi! How can I help you?</div>
         </div>
     )
